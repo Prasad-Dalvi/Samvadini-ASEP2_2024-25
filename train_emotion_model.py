@@ -1,82 +1,81 @@
 # train_emotion_model.py
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC
 from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
+from sklearn.feature_extraction.text import TfidfVectorizer
 import joblib
 
-# Sample dataset (expand with more examples)
+# Enhanced single-word emotion dataset
 data = {
     'text': [
-        # Happy (8 examples)
-        'I am thrilled with this wonderful news!',
-        'What a fantastic surprise!',
-        'This is the best day of my life!',
-        'I feel ecstatic and overjoyed!',
-        'Everything is going perfectly!',
-        'You just made my day!',
-        'I’m so grateful for this moment!',
-        'This is absolutely amazing!',
-
-        # Sad (8 examples)
-        'Feeling gloomy and miserable today',
-        'I feel anxious and worried',
-        'This is the worst day ever',
-        'I’m drowning in sadness',
-        'Nothing seems to work out for me',
-        'I feel utterly hopeless',
-        'My heart is breaking into pieces',
-        'The loneliness is crushing me',
-
-        # Angry (6 examples)
-        'This situation makes me furious',
-        'I’m boiling with rage right now',
-        'How dare you say that to me!',
-        'This is completely unacceptable!',
-        'I’ve never been so offended!',
-        'You’re driving me crazy!',
-
-        # Neutral (6 examples)
-        'Neutral statement without strong emotion',
-        'The meeting is scheduled for 3 PM',
-        'Today’s weather is partly cloudy',
-        'The document has been submitted',
-        'Please update the spreadsheet',
-        'The average temperature is 25°C',
-
-        # Fear (4 examples)
-        'I’m terrified of what might happen',
-        'This uncertainty is frightening',
-        'I feel a sense of impending doom',
-        'My hands are shaking with fear',
-
-        # Surprise (4 examples)
-        'I can’t believe my eyes!',
-        'This is completely unexpected!',
-        'Wow, that took me by surprise!',
-        'You just shocked me!'
+        # Happy (40 words)
+        'joy', 'happy', 'ecstatic', 'delighted', 'bliss', 'cheer', 'jubilant', 'elated',
+        'thrilled', 'excited', 'gleeful', 'content', 'sunny', 'radiant', 'upbeat', 'lively',
+        'vivacious', 'chipper', 'peppy', 'merry', 'festive', 'jovial', 'buoyant', 'exuberant',
+        'optimistic', 'euphoric', 'grateful', 'playful', 'smiling', 'laughing', 'chirpy', 'glad',
+        'blessed', 'fortunate', 'lucky', 'thankful', 'pleased', 'satisfied', 'triumphant', 'victorious',
+        
+        # Sad (40 words)
+        'sad', 'gloomy', 'tearful', 'mournful', 'melancholy', 'depressed', 'miserable', 'sorrow',
+        'heartbroken', 'despair', 'grief', 'woe', 'anguish', 'dismal', 'blue', 'downcast',
+        'forlorn', 'glum', 'somber', 'morose', 'weepy', 'pained', 'hurt', 'dejected',
+        'despondent', 'disheartened', 'crushed', 'defeated', 'lonely', 'isolated', 'abandoned', 'rejected',
+        'unhappy', 'wretched', 'bereaved', 'pessimistic', 'hopeless', 'lost', 'empty', 'numb',
+        
+        # Angry (30 words)
+        'angry', 'furious', 'enraged', 'irate', 'livid', 'incensed', 'outraged', 'seething',
+        'hostile', 'annoyed', 'irritated', 'aggravated', 'vexed', 'resentful', 'indignant', 'infuriated',
+        'cross', 'mad', 'heated', 'provoked', 'fuming', 'raging', 'storming', 'bitter',
+        'spiteful', 'vengeful', 'grumpy', 'testy', 'snappy', 'cranky',
+        
+        # Fear (30 words)
+        'afraid', 'scared', 'terrified', 'fearful', 'panicked', 'anxious', 'nervous', 'apprehensive',
+        'worried', 'frightened', 'alarmed', 'horrified', 'petrified', 'shocked', 'startled', 'timid',
+        'shaky', 'jittery', 'tense', 'uneasy', 'distressed', 'dread', 'phobic', 'paranoid',
+        'threatened', 'vulnerable', 'intimidated', 'overwhelmed', 'hesitant', 'trembling',
+        
+        # Surprise (20 words)
+        'surprised', 'shocked', 'amazed', 'astonished', 'stunned', 'flabbergasted', 'bewildered', 'dumbfounded',
+        'speechless', 'startled', 'jolted', 'astounded', 'confounded', 'staggered', 'dazed', 'stupefied',
+        'awestruck', 'thunderstruck', 'gobsmacked', 'perplexed',
+        
+        # Neutral (40 words)
+        'okay', 'fine', 'neutral', 'normal', 'average', 'regular', 'usual', 'typical',
+        'standard', 'mundane', 'routine', 'ordinary', 'common', 'plain', 'simple', 'moderate',
+        'balanced', 'calm', 'steady', 'composed', 'collected', 'detached', 'impartial', 'objective',
+        'unbiased', 'dispassionate', 'apathetic', 'indifferent', 'nonchalant', 'unemotional', 'stoic',
+        'reserved', 'cool', 'measured', 'controlled', 'level', 'even', 'fair', 'moderate', 'middling'
     ],
-    'emotion': [
-        'happy', 'happy', 'happy', 'happy', 'happy', 'happy', 'happy', 'happy',
-        'sad', 'sad', 'sad', 'sad', 'sad', 'sad', 'sad', 'sad',
-        'angry', 'angry', 'angry', 'angry', 'angry', 'angry',
-        'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
-        'fear', 'fear', 'fear', 'fear',
-        'surprise', 'surprise', 'surprise', 'surprise'
-    ]
+    'emotion': (
+        ['happy'] * 40 +
+        ['sad'] * 40 +
+        ['angry'] * 30 +
+        ['fear'] * 30 +
+        ['surprise'] * 20 +
+        ['neutral'] * 40
+    )
 }
 
 df = pd.DataFrame(data)
 
-# Define the ML pipeline
+# Corrected model pipeline
 model = Pipeline([
-    ('tfidf', TfidfVectorizer(stop_words='english')),
-    ('clf', SVC(kernel='linear', probability=True))
+    ('tfidf', TfidfVectorizer(ngram_range=(1, 2))),  # Fixed syntax
+    ('clf', SVC(
+        kernel='rbf',
+        C=1.5,
+        gamma='scale', 
+        probability=True
+    ))
 ])
 
 # Train the model
 model.fit(df['text'], df['emotion'])
 
 # Save the model
-joblib.dump(model, 'emotion_model.pkl')
+joblib.dump(model, 'emotion_model_single_word.pkl')
+
+print("Model trained and saved successfully!")
+print(f"Dataset contains {len(df)} training examples")
+print("Class distribution:")
+print(df['emotion'].value_counts())
