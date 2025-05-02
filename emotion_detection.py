@@ -4,7 +4,7 @@ import re
 import numpy as np
 
 # Load the trained model and TF-IDF vectorizer
-model = joblib.load('emotion_model.pkl')
+model = joblib.load('emotion_model_single_word.pkl')
 
 def detect_emotion(text):
     # Preprocess text
