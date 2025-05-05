@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Voice Assistant</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #response { margin-top: 20px; font-size: 20px; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Talk to Your AI Assistant</h1>
+  <button onclick="startRecognition()">🎤 Speak</button>
+  <p id="response">Say something...</p>
+
+  <script>
+    function startRecognition() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const query = event.results[0][0].transcript;
+        fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('response').textContent = data.response;
+          speak(data.response);
+        });
+      };
+    }
+
+    function speak(text) {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      synth.speak(utterance);
+    }
+  </script>
+</body>
+</html>
