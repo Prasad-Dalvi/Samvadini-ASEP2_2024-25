@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEXT TO ISL CONVERTER</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="body">
+    <div class="wrap">
+        <!-- Dynamically generate 200 triangles -->
+        <!-- No need to hard-code all divs here since it's handled by SCSS -->
+      </div>
+    <div class="container">
+        <h1 class="title">TEXT TO ISL CONVERTER</h1>
+        <!-- Input and button for text-to-video conversion -->
+        <div class="input-section">
+            <img src="./images/mic.png" id="mic" alt="Mic" onclick="startSpeechRecognition()">
+            <input type="text" id="textInput" placeholder="Enter text here..." onkeydown="handleKeyPress(event)">
+            <button onclick="convertToSign()">Convert</button>
+        </div>
+
+        <!-- Output section for videos or alphabets -->
+        <div id="output" class="video-output-container"></div>
+        <!-- 'Please Note' section -->
+        <div class="note-section">
+        <p><strong style="color: red;">Please Note:</strong> Data integration work is in progress.
+        </p>
+            <p>Currently, we integrate limited datasets. Use the text below to see our working of the text-to-ISL converter. You can integrate more dataset according to your need </p>
+            <p>1. Stay home stay safe</p>
+            <p>2. Do not ready to talk</p>
+        </div> 
+    </div>
+         
+
+    <!-- JavaScript file -->
+    <script src="script.js"></script>
+    <script src="three.r134.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+</body>
+</html>
