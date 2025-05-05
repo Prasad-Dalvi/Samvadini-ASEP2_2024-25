@@ -1,0 +1,300 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    overflow: hidden; /* Prevent all scrolling */
+}
+
+.wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0; /* Lower z-index for background triangles */
+    perspective: 1000px;
+    overflow: hidden; /* Prevent background animations from causing scrolling */
+}
+
+.input-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: #1b1b1b; /* Applying the background color */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 12px rgba(255, 0, 0, 0.5);
+}
+
+#mic {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#mic.glowing {
+    filter: drop-shadow(0px 0px 10px #e91e63);
+}
+
+.container {
+    z-index: 10; /* Ensure the white box is above the triangles */
+    text-align: center;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(255, 0, 0, 255);
+}
+
+.title {
+    color: #fff;
+    font-size: 2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: -webkit-linear-gradient(#f953c6, #b91d73);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    background-color: #333;
+    color: #fff;
+}
+
+input[type="text"]::placeholder {
+    color: #888;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0px 3px 10px rgba(233, 30, 99, 0.3);
+}
+
+button:hover {
+    background-color: lightblue;
+    color: #000;
+    transform: scale(1.05);
+}
+
+.note-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    color: #000; /* Black text color */
+    border: 2px solid #0ef; /* Border color */
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional box shadow for effect */
+}
+
+.note-container p {
+    font-size: 1em; /* Adjust font size */
+    line-height: 1.5;
+    margin: 0;
+}
+
+.note-container strong {
+    color: #0ef; /* Highlight "Please Note" */
+}
+@keyframes move {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-1000px); /* Adjust height to prevent overflow */
+    }
+}
+/* Keyframes for random movement (if needed in future) */
+@keyframes randomMovement {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(150px, 100px) rotate(180deg); }
+    50% { transform: translate(-200px, -150px) rotate(360deg); }
+    75% { transform: translate(250px, -100px) rotate(540deg); }
+    100% { transform: translate(0, 0) rotate(720deg); }
+}
+.word-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.video-output-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #f50057;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 100%; /* Allow full width */
+    width: 400px; /* Set a default width */
+}
+
+/* Adjusting video and letter container for centering */
+video, .letter-container {
+    width: 100%; /* Full width */
+    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #e91e63;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.letter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+
+.letter-container img {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+    display: none;
+}
+#output{
+    width: 555px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .input-section {
+        flex-direction: row; /* Keep microphone next to text input */
+    }
+
+    #mic {
+        width: 30px; /* Smaller size for mobile */
+        height: 30px;
+        margin-left: 10px; /* Add some space between mic and input */
+    }
+
+    input[type="text"] {
+        width: 200px; /* Reduce width for tablets */
+    }
+
+    video, .letter-container {
+        width: 300px; /* Reduce the size for videos and letter container */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        max-width: 90%; /* Allow more flexibility for small devices */
+        padding: 20px;
+    }
+    input[type="text"] {
+        width: 100%; /* Full width input field for mobile devices */
+    }
+    button {
+        width: 100%;
+        padding: 10px 0; /* Full-width button for mobile */
+    }
+    video, .letter-container {
+        width: 90%; /* Full width for video and letter container on mobile */
+        margin-bottom: 0px;
+    }
+    .video-output-container {
+        width: 100%; /* Full width for mobile */
+    }
+    #output{
+        width: 100%;
+    }
+}
+
+/* Mobile media query */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    #mic {
+        width: 30px; /* Smaller size for mobile */
+        height: 30px;
+    }
+
+    input[type="text"] {
+        font-size: 16px;
+        padding: 10px;
+        width: 100%; /* Full width to prevent scrolling */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    .input-with-mic {
+        padding: 8px;
+        display: flex; /* Ensure mic icon and input are aligned */
+        align-items: center; /* Center vertically */
+    }
+
+    .video-output-container {
+        width: 100%; /* Use full width */
+        margin-top: 10px; /* Center the container */
+        padding: 0px;
+
+    }
+
+    button {
+        padding: 10px 20px;
+        width: 40%; /* Full width for buttons */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    #output {
+        width: 100%; /* Full width for output */
+        max-width: 550px; /* Set a maximum width */
+        max-height: 250px; /* Limit the height to avoid overflow */
+        overflow: hidden; /* Hide overflow */
+        display: flex; /* Flexbox to keep items aligned */
+        justify-content: center; /* Center contents */
+        align-items: center; /* Center contents */
+    }
+}
+/* Triangle Styling */
+.tri {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent; /* Reduced size */
+    border-right: 5px solid transparent; /* Reduced size */
+    border-bottom: 10px solid lightgray; /* Light gray color */
+    transform-origin: 50% 50%;
+    animation: randomMovement 10s infinite ease-in-out;
+    opacity: 0.8;
+}
+
+/* Keyframes for random movement */
+@keyframes randomMovement {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(150px, 100px) rotate(180deg); }
+    50% { transform: translate(-200px, -150px) rotate(360deg); }
+    75% { transform: translate(250px, -100px) rotate(540deg); }
+    100% { transform: translate(0, 0) rotate(720deg); }
+}
