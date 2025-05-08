@@ -1,21 +1,32 @@
 # emotion_detection.py
-import joblib
-import re
-import numpy as np
+from transformers import pipeline
 
-# Load the trained model and TF-IDF vectorizer
-model = joblib.load('emotion_model_single_word.pkl')
+# Load pre-trained emotion detection model
+emotion_classifier = pipeline(
+    "text-classification",
+    model="bhadresh-savani/distilbert-base-uncased-emotion",
+    return_all_scores=True
+)
 
 def detect_emotion(text):
-    # Preprocess text
-    cleaned_text = re.sub(r'[^\w\s]', '', text.lower())
+    results = emotion_classifier(text)
+    emotions = []
     
-    # Predict emotion and confidence
-    prediction = model.predict([cleaned_text])[0]
-    probabilities = model.predict_proba([cleaned_text])
-    confidence = np.max(probabilities)
+    # Process results and convert to our format
+    for result in results[0]:
+        emotions.append({
+            "emotion": result["label"],
+            "confidence": result["score"]
+        })
     
-    return {
-        'emotion': prediction,
-        'confidence': round(float(confidence), 2)
-    }
+    # Sort by confidence descending
+    emotions.sort(key=lambda x: x["confidence"], reverse=True)
+    
+    # Add neutral if no strong emotion detected
+    if emotions[0]["confidence"] < 0.4:
+        emotions.insert(0, {
+            "emotion": "neutral",
+            "confidence": 1.0
+        })
+    
+    return emotions[:3]  # Return top 3 emotions
