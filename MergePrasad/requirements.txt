@@ -1,0 +1,13 @@
+flask
+flask_cors
+speechrecognition
+googletrans==4.0.0-rc1
+gTTS
+python-dotenv
+pywhatkit
+wikipedia
+pyjokes
+cohere
+requests
+transformers
+torch==2.4.1

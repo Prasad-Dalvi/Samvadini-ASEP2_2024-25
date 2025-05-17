@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Accessibility Assistant</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="wrap"></div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+        <nav class="container mx-auto flex items-center justify-between py-4 px-6">
+            <div class="text-3xl font-bold">Unified Accessibility Assistant</div>
+            <div class="flex items-center space-x-6">
+                <ul class="flex space-x-6">
+                    <li><a href="#home" class="hover:text-blue-200 text-lg">Home</a></li>
+                    <li><a href="#mission" class="hover:text-blue-200 text-lg">Mission</a></li>
+                    <li><a href="#tools" class="hover:text-blue-200 text-lg">Tools</a></li>
+                </ul>
+                <!-- Day/Night Mode Toggle -->
+                <button id="themeToggle" class="text-lg font-semibold focus:outline-none" aria-label="Toggle day/night mode">
+                    <span id="themeIcon">🌙</span> Mode
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-20 text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">Empowering Accessibility for Everyone</h1>
+            <p class="text-xl md:text-2xl mb-8">Unlock seamless communication with tools designed for visually and hearing-impaired individuals.</p>
+            <a href="#tools" class="inline-block bg-white text-blue-600 font-semibold text-lg py-4 px-8 rounded-full hover:bg-blue-100 transition">Discover Our Tools</a>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="py-16 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">Our Mission</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">We are dedicated to breaking down communication barriers for people with disabilities, providing intuitive and inclusive tools to connect, learn, and thrive.</p>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-gray-800 text-center mb-12">Our Tools</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Universal Input for Text-to-ISL, Text-to-Audio, and Speech Translation -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Universal Text Input</h3>
+                    <div class="input-section mb-4">
+                        <textarea id="universalInput" placeholder="Enter text for ISL, audio with emotion, or translation" class="w-full p-3 border rounded-md h-28 text-lg"></textarea>
+                        <div class="flex items-center mt-3 space-x-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/10891/10891702.png" id="universalMic" alt="Microphone" class="w-10 h-10 cursor-pointer" onclick="startSpeechRecognition('universal')">
+                            <select id="targetLang" class="p-3 border rounded-md text-lg">
+                                <option value="mr">Marathi</option> <!-- Added Marathi -->
+                                <option value="hi">Hindi</option>
+                                <option value="en">English</option>
+                                <option value="kn">Kannada</option>                             
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text-to-Audio with Emotion Detection -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Text-to-Audio with Emotion</h3>
+                    <div class="input-section mb-4">
+                        <button onclick="convertEmotionAudio()" class="bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition text-lg">Convert to Audio</button>
+                    </div>
+                    <div id="emotionResults" class="text-gray-600 text-lg">Detected Emotions: <span></span></div>
+                    <div id="speechParams" class="text-gray-600 text-lg">Speech Parameters: <span></span></div>
+                    <audio id="emotionAudio" controls class="w-full mt-3" style="display:none;"></audio>
+                </div>
+
+                <!-- Speech Translation and Playback -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Speech Translation and Playback</h3>
+                    <div class="input-section mb-4">
+                        <button onclick="translateSpeak()" class="bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition text-lg">Translate & Speak</button>
+                    </div>
+                    <p id="translateResult" class="text-gray-600 text-lg">Translated Text: <span></span></p>
+                    <audio id="translateAudio" controls class="w-full mt-3" style="display:none;"></audio>
+                </div>
+
+                <!-- AI Voice Assistant (Separate Input) -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">AI Voice Assistant</h3>
+                    <div class="input-section mb-4">
+                        <input type="text" id="assistantInput" placeholder="Ask your assistant..." class="w-full p-3 border rounded-md text-lg" onkeypress="handleAssistantKeyPress(event)">
+                        <div class="flex items-center mt-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/10891/10891702.png" id="assistantMic" alt="Microphone" class="w-10 h-10 cursor-pointer mr-3" onclick="startSpeechRecognition('assistant')">
+                            <button onclick="askAssistant()" class="bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition text-lg">Speak</button>
+                        </div>
+                    </div>
+                    <p id="assistantResponse" class="text-gray-600 text-lg">Say something...</p>
+                    <audio id="assistantAudio" controls class="w-full mt-3" style="display:none;"></audio>
+                </div>
+            </div>
+
+            <!-- Text-to-ISL Converter (Separated for Larger Size) -->
+            <div class="mt-8">
+                <div class="bg-white p-6 rounded-lg shadow-md isl-converter mx-auto">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Text to ISL Converter</h3>
+                    <div class="input-section mb-4">
+                        <button onclick="convertToSign()" class="bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition text-lg">Convert to ISL</button>
+                    </div>
+                    <div class="note-container text-lg text-gray-600 mb-4">
+                        <p><strong>Please Note:</strong> Use text like "Stay home stay safe" to see the converter in action.</p>
+                    </div>
+                    <div id="islOutput" class="video-output-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="mb-2 text-lg">© 2025 Unified Accessibility Assistant | Designed for People with Disabilities</p>
+            <p class="text-lg">Created by First Year AI & DS Students</p>
+        </div>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

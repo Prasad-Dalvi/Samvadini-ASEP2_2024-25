@@ -1,0 +1,256 @@
+/* Custom styles to complement Tailwind CSS */
+
+/* Base font size for better accessibility */
+html {
+    font-size: 18px; /* Increased base font size for PwD */
+}
+
+/* Light Mode (Default) */
+body {
+    background-color: #f3f4f6; /* bg-gray-100 */
+    color: #1f2937; /* text-gray-800 */
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #1f2937; /* Dark gray background */
+    color: #e5e7eb; /* Light gray text */
+}
+
+body.dark-mode .bg-white {
+    background-color: #374151; /* Darker card background */
+}
+
+body.dark-mode .text-gray-800 {
+    color: #e5e7eb; /* Light text for headings */
+}
+
+body.dark-mode .text-gray-600 {
+    color: #d1d5db; /* Lighter gray for secondary text */
+}
+
+body.dark-mode .bg-gray-100 {
+    background-color: #111827; /* Darker section background */
+}
+
+body.dark-mode .bg-gradient-to-r.from-blue-500.to-blue-700 {
+    background-image: linear-gradient(to right, #1e3a8a, #1e40af); /* Darker gradient for hero */
+}
+
+body.dark-mode .bg-gradient-to-r.from-blue-600.to-blue-800 {
+    background-image: linear-gradient(to right, #1e3a8a, #1e40af); /* Darker gradient for header */
+}
+
+body.dark-mode .bg-blue-600 {
+    background-color: #2563eb; /* Slightly lighter blue for buttons */
+}
+
+body.dark-mode .hover\:bg-blue-700:hover {
+    background-color: #1d4ed8; /* Darker hover state for buttons */
+}
+
+body.dark-mode .bg-gray-800 {
+    background-color: #111827; /* Darker footer background */
+}
+
+body.dark-mode .note-container {
+    background-color: #1e40af; /* Darker note background */
+    border-color: #60a5fa; /* Lighter border for contrast */
+}
+
+/* Animated Background (Triangles from G9) */
+.wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    perspective: 1000px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f9faff 100%);
+}
+
+body.dark-mode .wrap {
+    background: linear-gradient(135deg, #1e3a8a 0%, #111827 100%); /* Darker gradient for dark mode */
+}
+
+.tri {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #93c5fd;
+    transform-origin: 50% 50%;
+    animation: randomMovement 10s infinite ease-in-out;
+    opacity: 0.6;
+}
+
+body.dark-mode .tri {
+    border-bottom: 10px solid #60a5fa; /* Lighter blue for triangles in dark mode */
+}
+
+@keyframes randomMovement {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(150px, 100px) rotate(180deg); }
+    50% { transform: translate(-200px, -150px) rotate(360deg); }
+    75% { transform: translate(250px, -100px) rotate(540deg); }
+    100% { transform: translate(0, 0) rotate(720deg); }
+}
+
+/* Microphone Glow Effect */
+#universalMic, #assistantMic {
+    transition: all 0.3s ease;
+}
+
+#universalMic.glowing, #assistantMic.glowing {
+    filter: drop-shadow(0px 0px 10px #3b82f6);
+}
+
+body.dark-mode #universalMic.glowing, body.dark-mode #assistantMic.glowing {
+    filter: drop-shadow(0px 0px 10px #60a5fa);
+}
+
+/* Input Section */
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Increased gap for larger elements */
+}
+
+/* Note Container */
+.note-container {
+    background-color: #f0f9ff;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    border: 2px solid #3b82f6;
+}
+
+/* Text-to-ISL Converter Specific Styling */
+.isl-converter {
+    width: 1000px; /* Fixed width of 1000px */
+    height: 1000px; /* Fixed height of 1000px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem; /* Increased padding for larger text */
+}
+
+.isl-converter .video-output-container {
+    width: 100%;
+    height: 80%; /* Use most of the height for video display */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto; /* Allow scrolling if content overflows */
+}
+
+.isl-converter .word-title {
+    font-size: 1.5rem; /* Increased font size */
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+}
+
+body.dark-mode .isl-converter .word-title {
+    color: #e5e7eb;
+}
+
+.isl-converter video, .isl-converter .letter-container {
+    width: 100%; /* Take full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 80%; /* Ensure the video doesn't exceed the container height */
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+body.dark-mode .isl-converter video, body.dark-mode .isl-converter .letter-container {
+    border-color: #60a5fa;
+}
+
+.isl-converter .letter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.isl-converter #islOutput {
+    width: 100%;
+    height: 100%;
+}
+
+/* General Video Output Container (for other sections if needed) */
+.video-output-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.25rem;
+    width: 100%;
+}
+
+.word-title {
+    font-size: 1.5rem; /* Increased font size */
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+}
+
+body.dark-mode .word-title {
+    color: #e5e7eb;
+}
+
+video, .letter-container {
+    width: 80%;
+    border: 2px solid #3b82f6;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+body.dark-mode video, body.dark-mode .letter-container {
+    border-color: #60a5fa;
+}
+
+.letter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+#islOutput {
+    width: 100%;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 1024px) {
+    .isl-converter {
+        width: 100%; /* On smaller screens, use full width */
+        height: auto; /* Allow height to adjust based on content */
+        min-height: 500px; /* Ensure a minimum height for usability */
+    }
+
+    .isl-converter .video-output-container {
+        height: auto; /* Adjust height dynamically */
+        min-height: 400px;
+    }
+
+    .isl-converter video, .isl-converter .letter-container {
+        width: 100%;
+        max-height: none; /* Remove max-height constraint on smaller screens */
+    }
+
+    video, .letter-container {
+        width: 100%;
+    }
+
+    #islOutput {
+        width: 100%;
+    }
+}
