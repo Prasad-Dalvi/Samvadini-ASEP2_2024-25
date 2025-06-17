@@ -17,17 +17,26 @@ from dotenv import load_dotenv
 app = Flask(__name__)
 CORS(app)
 
-# Load environment variables
+#Load environment variables
 load_dotenv()
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 CITY_NAME = "Pune"
 
-co = cohere.Client(COHERE_API_KEY)
+# Initialize Cohere client
+co = None
+if COHERE_API_KEY:
+    try:
+        co = cohere.Client(COHERE_API_KEY)
+    except Exception as e:
+        pass  # Silently handle Cohere initialization errors
 
 # Ensure audio directory exists
 AUDIO_DIR = os.path.join("static", "audio")
-os.makedirs(AUDIO_DIR, exist_ok=True)
+try:
+    os.makedirs(AUDIO_DIR, exist_ok=True)
+except Exception as e:
+    pass  # Silently handle directory creation errors
 
 # Emotion to speech parameters mapping (G11)
 EMOTION_PARAMS = {
@@ -47,24 +56,36 @@ def index():
 # G10: AI Voice Assistant
 @app.route("/ask", methods=["POST"])
 def ask():
-    data = request.json
-    query = data.get("query", "")
-    response = process_command_from_web(query)
-    audio_path = generate_audio(response, "en")
-    return jsonify({"response": response, "audio": audio_path})
+    try:
+        data = request.json
+        query = data.get("query", "")
+        if not query:
+            return jsonify({"status": "error", "message": "No query provided"}), 400
+        response = process_command_from_web(query)
+        audio_path = generate_audio(response, "en")
+        return jsonify({"response": response, "audio": audio_path})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 def get_weather():
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY_NAME}&appid={WEATHER_API_KEY}&units=metric"
-    response = requests.get(url)
-    data = response.json()
-    if data["cod"] == 200:
-        temp = data["main"]["temp"]
-        description = data["weather"][0]["description"]
-        return f"The current temperature in {CITY_NAME} is {temp}°C with {description}."
-    else:
-        return "Sorry, I couldn't fetch the weather right now."
+    if not WEATHER_API_KEY:
+        return "Weather API key not provided."
+    try:
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY_NAME}&appid={WEATHER_API_KEY}&units=metric"
+        response = requests.get(url)
+        data = response.json()
+        if data["cod"] == 200:
+            temp = data["main"]["temp"]
+            description = data["weather"][0]["description"]
+            return f"The current temperature in {CITY_NAME} is {temp}°C with {description}."
+        else:
+            return "Sorry, I couldn't fetch the weather right now."
+    except Exception as e:
+        return "Error fetching weather data."
 
 def get_cohere_response(prompt):
+    if not co:
+        return "Cohere API not available."
     try:
         response = co.chat(message=prompt, model="command-r")
         return response.text.strip()
@@ -74,10 +95,20 @@ def get_cohere_response(prompt):
 def process_command_from_web(command):
     command = command.lower()
 
-    if 'play' in command:
+    if 'open youtube' in command:
+        try:
+            pywhatkit.playonyt("https://www.youtube.com")  # Opens YouTube homepage
+            return "Opening YouTube."
+        except Exception as e:
+            return f"Error opening YouTube: {str(e)}"
+
+    elif 'play' in command:
         song = command.replace('play', '').strip()
-        pywhatkit.playonyt(song)
-        return f"Playing {song}"
+        try:
+            pywhatkit.playonyt(song)
+            return f"Playing {song} on YouTube."
+        except Exception as e:
+            return f"Error playing {song}: {str(e)}"
 
     elif 'how are you' in command:
         return "I'm doing great! Thanks for asking. What can I help you with?"
@@ -93,7 +124,10 @@ def process_command_from_web(command):
 
     elif "who is" in command or "what is" in command:
         person = command.replace('who is', '').replace('what is', '').strip()
-        return wikipedia.summary(person, 1)
+        try:
+            return wikipedia.summary(person, 1)
+        except Exception as e:
+            return "Sorry, I couldn't find information on that."
 
     elif 'joke' in command:
         return pyjokes.get_joke()
@@ -105,7 +139,7 @@ def process_command_from_web(command):
     else:
         return "Please ask a correct question."
 
-# G11: Text-to-Audio with Emotion Detection
+# G12: Text-to-Audio with Emotion Detection
 @app.route('/text-to-audio', methods=['POST'])
 def text_to_audio():
     try:
@@ -144,6 +178,9 @@ def translate_speak():
         input_text = data.get("text", "")
         target_lang = data.get("lang", "kn")  # Default to Kannada
 
+        if not input_text:
+            return jsonify({"status": "error", "message": "No text provided"}), 400
+
         translator = Translator()
         translated = translator.translate(input_text, dest=target_lang)
         translated_text = translated.text
@@ -178,4 +215,4 @@ def generate_audio(text, lang, params=None):
         raise Exception(f"TTS error: {e}")
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5500)
+    app.run(debug=False, port=5500)  # Disable debug mode to reduce logging

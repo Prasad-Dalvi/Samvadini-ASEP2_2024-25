@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unified Accessibility Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="static/style.css"/>
+  <script src="static/script.js" defer></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-6 shadow-lg">
+    <nav class="container mx-auto flex justify-between items-center px-4">
+      <h1 class="text-3xl font-bold">Unified Accessibility Assistant</h1>
+      <div class="flex gap-6 items-center">
+        <a href="#home" class="hover:text-blue-200">Home</a>
+        <a href="#tools" class="hover:text-blue-200">Tools</a>
+        <button id="themeToggle" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <span id="themeIcon">🌙</span> Mode
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Tools Section -->
+  <section id="tools" class="py-12 bg-gray-100">
+    <div class="container mx-auto space-y-10 px-4">
+
+      <!-- Universal Text Input -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Universal Text Input</h2>
+        <div class="flex items-center border rounded-full px-4 py-2 bg-gray-50 shadow-inner">
+          <input type="text" id="universalInput" placeholder="Search or speak..." 
+                 class="flex-grow text-base text-gray-800 bg-transparent outline-none px-2"/>
+          <button id="universalMic" class="text-xl text-blue-600 hover:text-blue-800" title="Speak">🎤</button>
+          <select id="targetLang" class="ml-4 p-2 border rounded-lg text-gray-800">
+            <option value="mr">Marathi</option>
+            <option value="hi">Hindi</option>
+            <option value="en">English</option>
+            <option value="kn">Kannada</option>
+          </select>
+        </div>
+      </div>
+
+
+      <!-- Button Actions Row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+         
+         <!-- AI Voice Assistant -->
+      <div class="bg-white p-6 rounded-lg shadow-lg w-full ">
+        
+        <div class="flex items-center border rounded-full px-4 py-2 bg-gray-50 shadow-inner">
+          <input type="text" id="assistantInput" placeholder="Ask your assistant..." 
+                 onkeypress="handleAssistantKeyPress(event)"
+                 class="flex-grow text-base text-gray-800 bg-transparent outline-none px-2"/>
+          <button id="assistantMic" onclick="startSpeechRecognition('assistant')" 
+                  class="text-xl text-blue-600 hover:text-blue-800" title="Speak">🎤</button>
+        </div>
+        <button onclick="askAssistant()" class="mt-4 bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 self-start">Speak</button>
+        <p id="assistantResponse" class="text-gray-600 mt-2 text-sm">Say something...</p>
+        <audio id="assistantAudio" class="w-full hidden mt-2" controls></audio>
+        <label class="text-sm text-gray-600 mt-2 block">AI Audio Speed:
+          <input type="range" min="0.5" max="2" step="0.1" value="1" 
+                 onchange="document.getElementById('assistantAudio').playbackRate = this.value">
+        </label>
+      </div>
+        
+        <!-- Emotion to Audio -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <button onclick="convertEmotionAudio()" 
+                  class="bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition text-lg w-full">Convert to Audio</button>
+          <div id="emotionResults" class="text-gray-600 text-lg mt-4">Detected Emotions: <span></span></div>
+          <div id="speechParams" class="text-gray-600 text-lg mt-1">Speech Parameters: <span></span></div>
+          <audio id="emotionAudio" controls class="w-full mt-3 hidden"></audio>
+          <label class="text-sm text-gray-600 mt-2 block">AI Audio Speed:
+            <input type="range" min="0.5" max="2" step="0.1" value="1" 
+                   onchange="document.getElementById('emotionAudio').playbackRate = this.value">
+          </label>
+        </div>
+
+        <!-- Translate & Speak -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <button onclick="translateSpeak()" 
+                  class="bg-blue-600 text-white py-3 px-6 rounded-full hover:bg-blue-700 transition text-lg w-full">Translate & Speak</button>
+          <p id="translateResult" class="text-gray-600 text-lg mt-4">Translated Text: <span></span></p>
+          <audio id="translateAudio" controls class="w-full mt-3 hidden"></audio>
+          <label class="text-sm text-gray-600 mt-2 block">Translated Audio Speed:
+            <input type="range" min="0.5" max="2" step="0.1" value="1" 
+                   onchange="document.getElementById('translateAudio').playbackRate = this.value">
+          </label>
+        </div>
+
+      </div>
+
+      <!-- ISL Converter -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Text to ISL Converter</h2>
+        <button onclick="convertToSign()" 
+                class="bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 w-full mb-4">Convert to ISL</button>
+        <p class="text-gray-600 mb-4">Please Note: Use text like "Stay home stay safe" to see the converter in action.</p>
+        <div id="islOutput" class="video-output-container"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-6">
+    <p>© 2025 Unified Accessibility Assistant | Designed for People with Disabilities</p>
+    <p class="mt-2">Created by First Year AI & DS Students</p>
+  </footer>
+
+</body>
+</html>
