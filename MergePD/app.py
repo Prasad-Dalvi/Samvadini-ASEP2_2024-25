@@ -5,7 +5,7 @@ from googletrans import Translator
 from gtts import gTTS
 from gtts.lang import tts_langs
 import os
-import pywhatkit
+#import pywhatkit
 import wikipedia
 import datetime
 import pyjokes
@@ -75,9 +75,10 @@ def process_command_from_web(command):
     command = command.lower()
 
     if 'play' in command:
-        song = command.replace('play', '').strip()
-        pywhatkit.playonyt(song)
-        return f"Playing {song}"
+        return "Please ask a correct question."
+        #song = command.replace('play', '').strip()
+        #pywhatkit.playonyt(song)
+        #return f"Playing {song}"
 
     elif 'how are you' in command:
         return "I'm doing great! Thanks for asking. What can I help you with?"
