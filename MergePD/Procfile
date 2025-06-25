@@ -1,1 +1,3 @@
-web: gunicorn app:app
+web: gunicorn MergePD.app:app
+
+
