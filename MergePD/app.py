@@ -215,4 +215,4 @@ def generate_audio(text, lang, params=None):
         raise Exception(f"TTS error: {e}")
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5500)  # Disable debug mode to reduce logging
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5500)))
