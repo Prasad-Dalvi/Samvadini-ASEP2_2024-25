@@ -1,3 +1,4 @@
+//app.py
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import speech_recognition as sr
