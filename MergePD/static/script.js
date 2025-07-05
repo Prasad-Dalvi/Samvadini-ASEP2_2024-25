@@ -56,41 +56,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Assistant input not found.");
     }
 
-    // Background Triangles (G9)
-    const wrap = document.querySelector('.wrap');
-    if (wrap) {
-        const totalTriangles = 100;
-        for (let i = 0; i < totalTriangles; i++) {
-            const tri = document.createElement('div');
-            tri.classList.add('tri');
-            tri.style.top = `${Math.random() * 100}vh`;
-            tri.style.left = `${Math.random() * 100}vw`;
-            const duration = Math.random() * 10 + 5;
-            tri.style.animation = `randomMovement ${duration}s infinite`;
-            wrap.appendChild(tri);
-        }
-
-        document.addEventListener('mousemove', function(e) {
-            const triangles = document.querySelectorAll('.tri');
-            triangles.forEach(triangle => {
-                const rect = triangle.getBoundingClientRect();
-                const dx = e.clientX - (rect.left + rect.width / 2);
-                const dy = e.clientY - (rect.top + rect.height / 2);
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < 150) {
-                    const angle = Math.atan2(dy, dx);
-                    const offsetX = Math.cos(angle) * -50;
-                    const offsetY = Math.sin(angle) * -50;
-                    triangle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-                } else {
-                    triangle.style.transform = '';
-                }
-            });
-        });
-    } else {
-        console.error("Wrap element for background triangles not found.");
-    }
 });
 
 // G9: Text-to-ISL Converter
